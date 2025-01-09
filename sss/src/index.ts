@@ -5,9 +5,6 @@ import * as crypto from 'crypto';
 const toUint8Array = (data: string) => new TextEncoder().encode(data);
 
 async function main() {
-  // 사용자 입력을 분할하는 예제
-  const input = 'text';
-
   const mnemonic = bip39.generateMnemonic();
   console.log('Generated Mnemonic:', mnemonic);
 

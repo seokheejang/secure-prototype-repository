@@ -25,7 +25,7 @@ cp /opt/homebrew/Cellar/softhsm/2.6.1/lib/softhsm/libsofthsm2.so /opt/homebrew/C
 slot 생성
 
 ```bash
-softhsm2-util --init-token --slot 0 --label "my-soft-hsm" --init-token
+softhsm2-util --init-token --slot 0 --label "my-soft-hsm"
 ```
 
 개인 키 생성 (PKCS#8 형식으로 저장)
@@ -33,7 +33,6 @@ softhsm2-util --init-token --slot 0 --label "my-soft-hsm" --init-token
 ```bash
 openssl genpkey -algorithm RSA -out private_key.pem
 openssl rsa -pubout -in private_key.pem -out public_key.pem
-
 ```
 
 slot 확인
@@ -66,3 +65,25 @@ slot 삭제
 softhsm2-util --slot 0 --pin 1234 --token "my-soft-hsm" --delete-token
 ```
 
+---
+
+ethereum
+
+```bash
+softhsm2-util --init-token --slot 1 --label "my-soft-hsm-2"
+```
+
+```bash
+openssl ecparam -name secp256k1 -genkey -noout -out secp256k1_key.pem
+
+openssl pkcs8 -topk8 -inform PEM -outform PEM -nocrypt -in secp256k1_key.pem -out secp256k1_key_pkcs8.pem
+
+```
+
+```bash
+softhsm2-util --slot 1923986552 --pin 1234 --label "my-key-id" --id 12345678 --import secp256k1_key_pkcs8.pem
+```
+
+```bash
+softhsm2-util --slot 1 --pin 1234 --token "my-soft-hsm-2" --delete-token
+```
